@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 
 
@@ -7,18 +7,20 @@ import { useState } from 'react';
 
 function App() {
 
-  const [msg, setMsg] = useState('');
+  const obj = useRef(100);
+  const [counter, setCounter] = useState(0)
 
-  useEffect(() => {
-    async function fetchData() {
-      const data = await fetch('https://jsonplaceholder.typicode.com/posts').then(response => response.json());
-      setMsg(data);
-    }
-    fetchData();
-  }, [])
+  useEffect(() =>{
+    console.log('Effect ran');
+  }, [obj])
+
+  useEffect(() =>{
+    obj.current += 5
+    console.log('now object is ', obj)
+  }, [counter])
 
   return <div className="App">
-    <h1>Counter1:{msg}</h1>
+    <h1 onClick={()=> setCounter(counter => counter +1)}>Counter: {counter}</h1>
   </div>
 }
 
