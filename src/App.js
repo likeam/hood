@@ -1,27 +1,52 @@
 
-import { useEffect, useRef } from 'react';
-import { useState } from 'react';
 
+import { useReducer, useState } from 'react';
+
+function randomFunction(state, action){
+
+  switch(action.type){
+    case 'INCREMENT_SETUP': {
+      return {
+        ...state,
+        step: state.step + action.playload
+      }
+    }
+    case 'INCREMENT_COUNTER': {
+      return {
+        ...state,
+        counter: state.counter + state.step
+      }
+    }
+  }
+}
 
 
 
 function App() {
 
-  const obj = useRef(100);
-  const [counter, setCounter] = useState(0)
+  // const [step, setStep] = useState(20);
 
-  useEffect(() =>{
-    console.log('Effect ran');
-  }, [obj])
+  const [state, dispatch] = useReducer(randomFunction, {
+    counter: 0,
+    step: 1
+  })
 
-  useEffect(() =>{
-    obj.current += 5
-    console.log('now object is ', obj)
-  }, [counter])
+  function incrementCounter(){
+    dispatch({
+      type: 'INCREMENT_COUNTER', 
+      playload: 1
+    })
+  }
+  
 
-  return <div className="App">
-    <h1 onClick={()=> setCounter(counter => counter +1)}>Counter: {counter}</h1>
-  </div>
+
+  return <div className="App" >
+    <h1 
+    onClick={incrementCounter}
+    >Counter: {state.counter}</h1>
+    <h2>Current step: {state.step}</h2>
+    <button onClick={incrementCounter}>Increase the Increment</button>
+    </div>
 }
 
 export default App;
